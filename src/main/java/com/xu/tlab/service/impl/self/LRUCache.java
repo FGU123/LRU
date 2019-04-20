@@ -32,7 +32,7 @@ public class LRUCache<K, V> {
 	/**
 	 *  定义 节点的结构
 	 */
-	class Node {
+	public class Node {
 
 		private K key;
 
@@ -54,11 +54,18 @@ public class LRUCache<K, V> {
 			node.key = key;
 		}
 		node.value = value;
-		if( map.size() >= capacity ) {
+		if( removeEldest( node ) ) {
 			removeTail();
 		}
 		map.put( key, node );
 		moveToHead( node );
+	}
+
+	/**
+	 * 定义成方法，让它可以开放出去，让使用者重写来自定义逻辑
+	 */
+	protected boolean removeEldest( Node eldest ) {
+		return map.size() >= capacity;
 	}
 
 	private void removeTail() {
@@ -72,7 +79,7 @@ public class LRUCache<K, V> {
 	 * 因为是当前节点是被删除的节点，所以自己的前后指针不需要管
 	 *  
 	 * 1. 如果当前节点是尾节点，把尾指针往前挪一个节点
-	 * 2. 如果当前节点是头节点，把尾指针往后挪一个节点
+	 * 2. 如果当前节点是头节点，把头指针往后挪一个节点
 	 * 3. 如果当前节点的前指针不为空，前节点的后指针指向后节点
 	 * 4. 如果当前节点的后指针不为空，后节点的前指针指向前节点
 	 */
@@ -147,4 +154,3 @@ public class LRUCache<K, V> {
 	}
 
 }
-
